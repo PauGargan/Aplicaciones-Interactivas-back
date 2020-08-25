@@ -11,14 +11,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       availability.belongsTo(models.users, {
-        as: 'users',
+        as: 'doctors',
         foreignKey: 'doctor_id'
+      });
+      availability.belongsTo(models.users, {
+        as: 'patients',
+        foreignKey: 'patient_id'
       })
     }
   };
   availability.init({
     doctor_id: {
       allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    patient_id: {
+      allowNull: true,
+      defaultValue: null,
       type: DataTypes.INTEGER
     },
     date: {
@@ -29,19 +38,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-    timeFrom: {
+    time: {
       allowNull: false,
       type: DataTypes.STRING
     },
-    timeTo: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
-    frequency: {
-      allowNull: false,
-      defaultValue: 30,
-      type: DataTypes.INTEGER
-    }
   }, {
     sequelize,
     modelName: 'availability',

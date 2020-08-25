@@ -18,9 +18,18 @@ module.exports = {
         // Genero array de horarios por dia de semana
         let schedule = [];
         for(var i = 0; i < scheduleTemp.length; i++){
+            let startArr = scheduleTemp[i].start.split(':');
+            let startHour = startArr[0];
+            let startMin  = startArr[1];
+
+            let endArr = scheduleTemp[i].end.split(':');
+            let endHour = endArr[0];
+            let endMin  = endArr[1];
             schedule[scheduleTemp[i].day] = {
-                start: scheduleTemp[i].start,
-                end: scheduleTemp[i].end
+                startHour: startHour,
+                startMin: startMin,
+                endHour: endHour,
+                endMin: endMin
             }
         }
         
@@ -32,16 +41,25 @@ module.exports = {
                 var obj = {};
                 if(typeof schedule[dt.getDay()] !== 'undefined')
                 {
-                    obj = {
-                        doctor_id: doc,
-                        date: dt.getFullYear() + "-" + ((dt.getMonth()+1).length > 1? (dt.getMonth()+1) : "0" + (dt.getMonth()+1)) 
-                            + "-" + (dt.getDate().length > 1? dt.getDate() : "0" + dt.getDate()),
-                        weekday: dt.getDay(),
-                        timeFrom: schedule[dt.getDay()].start,
-                        timeTo: schedule[dt.getDay()].end,
-                        frequency: freq
-                    };
-                    arr.push(obj);
+                    let weekday = dt.getDay();
+                    start = new Date(dt);
+                    start.setHours(schedule[weekday].startHour)
+                    start.setMinutes(schedule[weekday].startMin);
+                    end = new Date(dt);
+                    end.setHours(schedule[weekday].endHour)
+                    end.setMinutes(schedule[weekday].endMin);
+
+                    while(start < end) {
+                        obj = {
+                            doctor_id: doc,
+                            date: dt.getFullYear() + "-" + ((dt.getMonth()+1) > 9? (dt.getMonth()+1) : "0" + (dt.getMonth()+1)) 
+                                + "-" + (dt.getDate() > 9? dt.getDate() : "0" + dt.getDate()),
+                            weekday: weekday,
+                            time: start.getHours() + ":" + (start.getMinutes() === 0 ? "0" + start.getMinutes() : start.getMinutes()),
+                        };
+                        start.setMinutes(start.getMinutes() + freq);
+                        arr.push(obj);
+                    }
                 }
                 dt = new Date(dt);
             }
@@ -56,7 +74,7 @@ module.exports = {
     },
 
     /**
-     * List of Users
+     * List of Availabilities
      */
     list (_, res) {
         return availability
@@ -66,13 +84,28 @@ module.exports = {
     },
 
     /**
-     * Find a Users
+     * Find a Availabilities
      */
     find (req, res) {
         return availability
             .findAll({
                 where: {
                     doctor_id: req.params.doctor,
+                }
+            })
+            .then(availability => res.status(200).send(availability))
+            .catch(error => res.status(400).send(error))
+    },
+
+    /**
+     * Find availability by doc and date
+     */
+    findByDate (req, res) {
+        return availability
+            .findAll({
+                where: {
+                    doctor_id: req.params.doctor,
+                    date: req.params.date
                 }
             })
             .then(availability => res.status(200).send(availability))
