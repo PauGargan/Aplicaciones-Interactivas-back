@@ -5,6 +5,7 @@ const featureController = require('../controllers/features');
 const permissionController = require('../controllers/permissions');
 const availabilityController = require('../controllers/availability');
 const appointmentController = require('../controllers/appointments');
+const uploadController = require('../controllers/uploads');
 
 module.exports = (app) => {
 
@@ -48,5 +49,9 @@ module.exports = (app) => {
   app.get('/api/appointment/find/doctor/:doctor', appointmentController.findByDoctor);
   app.get('/api/appointment/find/patient/:patient', appointmentController.findByPatient);
   app.get('/api/appointment/exists/doctor/:doctor/date/:date/time/:time', appointmentController.appointmentExists);
+
+  // UPLOAD
+  app.post('/api/upload', uploadController.uploadFiles);
+
 }
 
