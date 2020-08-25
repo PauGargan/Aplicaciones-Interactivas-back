@@ -11,6 +11,7 @@ module.exports = {
         return users
             .create({
                 username: req.body.username,
+                role_id: req.body.roleId,
                 email: req.body.email,
                 status: req.body.status
             })
