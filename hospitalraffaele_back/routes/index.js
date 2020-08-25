@@ -3,6 +3,8 @@ const patientController = require('../controllers/patients');
 const roleController = require('../controllers/roles');
 const featureController = require('../controllers/features');
 const permissionController = require('../controllers/permissions');
+const availabilityController = require('../controllers/availability');
+const appointmentController = require('../controllers/appointments');
 
 module.exports = (app) => {
 
@@ -34,5 +36,16 @@ module.exports = (app) => {
   app.post('/api/patient/create', patientController.create);
   app.get('/api/patient/list', patientController.list);
   app.get('/api/patient/find/dni/:dni', patientController.find);
+
+  // API Services Availability
+  app.post('/api/availability/create', availabilityController.create);
+  app.get('/api/availability/list', availabilityController.list);
+  app.get('/api/availability/find/doctor/:doctor', availabilityController.find);
+  
+  // API Services Appointments
+  app.post('/api/appointment/create', appointmentController.create);
+  app.get('/api/appointment/list', appointmentController.list);
+  app.get('/api/appointment/find/doctor/:doctor', appointmentController.findByDoctor);
+  app.get('/api/appointment/find/patient/:patient', appointmentController.findByPatient);
 }
 
