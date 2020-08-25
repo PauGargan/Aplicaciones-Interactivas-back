@@ -121,3 +121,14 @@ exports.uploadFiles = async function (req, res, next) {
 		res.json({ok: true, msg: 'Files uploaded succesfully!', files: myUploadedFiles})
 	})
 }
+
+exports.findByPatient = function (req, res) {
+	return upload
+		.findAll({
+			where: {
+				patient_id: req.params.patient,
+			}
+		})
+		.then(uploads => res.status(200).send(uploads))
+		.catch(error => res.status(400).send(error))
+}

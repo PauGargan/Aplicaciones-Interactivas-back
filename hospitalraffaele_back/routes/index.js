@@ -6,6 +6,7 @@ const permissionController = require('../controllers/permissions');
 const availabilityController = require('../controllers/availability');
 const appointmentController = require('../controllers/appointments');
 const uploadController = require('../controllers/uploads');
+const downloadController = require('../controllers/downloads');
 
 module.exports = (app) => {
 
@@ -50,8 +51,10 @@ module.exports = (app) => {
   app.get('/api/appointment/find/patient/:patient', appointmentController.findByPatient);
   app.get('/api/appointment/exists/doctor/:doctor/date/:date/time/:time', appointmentController.appointmentExists);
 
-  // UPLOAD
+  // Upload and download
   app.post('/api/upload', uploadController.uploadFiles);
+  app.get('/api/upload/patient/:patient', uploadController.findByPatient);
+  app.get('/api/download/fileName/:fileName', downloadController.download); 
 
 }
 
