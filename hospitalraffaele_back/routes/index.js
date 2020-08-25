@@ -41,11 +41,12 @@ module.exports = (app) => {
   app.post('/api/availability/create', availabilityController.create);
   app.get('/api/availability/list', availabilityController.list);
   app.get('/api/availability/find/doctor/:doctor', availabilityController.find);
+  app.get('/api/availability/find/doctor/:doctor/date/:date', availabilityController.findByDate); 
   
   // API Services Appointments
   app.post('/api/appointment/create', appointmentController.create);
-  app.get('/api/appointment/list', appointmentController.list);
   app.get('/api/appointment/find/doctor/:doctor', appointmentController.findByDoctor);
   app.get('/api/appointment/find/patient/:patient', appointmentController.findByPatient);
+  app.get('/api/appointment/exists/doctor/:doctor/date/:date/time/:time', appointmentController.appointmentExists);
 }
 
