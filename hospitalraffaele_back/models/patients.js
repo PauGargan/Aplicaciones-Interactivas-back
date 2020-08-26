@@ -27,6 +27,46 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       type: DataTypes.INTEGER
     },
+    nombre: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    apellido: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    fecha_nacimiento: {
+      allowNull: true,
+      type: DataTypes.DATEONLY
+    },
+    sexo: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    ocupacion: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    estado_civil: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    nacionalidad: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    direccion: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    telefono: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    nivel_educacion: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
     es_particular: {
       allowNull: false,
       type: DataTypes.INTEGER,
