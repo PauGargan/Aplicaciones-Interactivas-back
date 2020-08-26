@@ -38,6 +38,8 @@ module.exports = {
                         })
                         .then(patient => res.status(200).send(patient))
                         .catch(error => res.status(400).send(error));
+                } else {
+                    return res.status(200).send(users); 
                 }
             })
             .catch(error => res.status(400).send(error))
