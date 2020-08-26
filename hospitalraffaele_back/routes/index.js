@@ -16,11 +16,15 @@ module.exports = (app) => {
 
   // API Services Users
   app.post('/api/user/create', userController.create);
+  app.post('/api/user/update', userController.update);
+  app.post('/api/user/disable', userController.disable);
   app.get('/api/user/list', userController.list);
-  app.get('/api/user/find/username/:username', userController.find);
+  app.get('/api/user/find/email/:email', userController.find);
+  app.get('/api/user/list/role/:role', userController.listByRole);
 
   // API Services Roles
   app.post('/api/role/create', roleController.create);
+  app.post('/api/role/update', roleController.update);
   app.get('/api/role/list', roleController.list);
   app.get('/api/role/find/name/:name', roleController.find);
 
@@ -30,7 +34,8 @@ module.exports = (app) => {
   app.get('/api/feature/find/name/:name', featureController.find);
 
   // API Services Permissions
-  app.post('/api/permission/create', permissionController.create);
+  app.post('/api/permission/update', permissionController.update);
+  app.get('/api/permission/list/role/:role', permissionController.find);
   //app.get('/api/feature/list', featureController.list);
   //app.get('/api/feature/find/name/:name', featureController.find);
 

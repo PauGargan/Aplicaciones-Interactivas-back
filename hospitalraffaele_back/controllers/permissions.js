@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../models');
 const permissions = db.permissions;
+const roles = db.roles;
 const features = db.features;
 
 module.exports = {
@@ -8,18 +9,25 @@ module.exports = {
     /**
      * Permissions Create
      */
-    create (req, res) {
+    update (req, res) {
         return permissions
-            .create({
-                role_id: req.body.roleId,
-                feature_id: req.body.featureId,
-                can_create: req.body.canCreate,
-                can_read: req.body.canRead,
-                can_update: req.body.canUpdate,
-                can_delete: req.body.canDelete,
+            .findOne({
+                where: {
+                    role_id: req.body.role_id,
+                    feature_id: req.body.feature_id
+                }
             })
-            .then(permissions => res.status(200).send(permissions))
+            .then(permissions => {
+                delete req.body.role_id;
+                delete req.body.feature_id;
+
+                return permissions
+                    .update(req.body)
+                    .then(permissions => res.status(200).send(permissions))
+                    .catch(error => res.status(400).send(error))
+            })
             .catch(error => res.status(400).send(error))
+          
     },
 
     /**
@@ -39,7 +47,7 @@ module.exports = {
         return permissions
             .findAll({
                 where: {
-                    role_id: req.params.roleId,
+                    role_id: req.params.role,
                 },
                 include: [{
                     model: features,
