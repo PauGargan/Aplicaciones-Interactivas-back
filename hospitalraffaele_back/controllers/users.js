@@ -1,6 +1,16 @@
+const bcrypt = require('bcrypt');
 const Sequelize = require('sequelize');
 const db = require('../models');
 const users = db.users;
+
+const hashPasswordAsync = async password => {
+//	const salt = await bcrypt.genSalt()
+	const hash = await bcrypt.hash(password);/*
+	 * Instead of logging on the console
+	 * you can store the password on the DB
+	 */
+	return hash;
+}
 
 module.exports = {
 
@@ -8,15 +18,18 @@ module.exports = {
      * Users Create
      */
     create (req, res) {
+        // TODO Encriptar password!!! Se puede usar bcrypt, investigar
+
         return users
             .create({
-                username: req.body.username,
                 role_id: req.body.role_id,
                 email: req.body.email,
+                password: req.body.password,
                 status: req.body.status
             })
             .then(users => res.status(200).send(users))
             .catch(error => res.status(400).send(error))
+
     },
 
     /**
