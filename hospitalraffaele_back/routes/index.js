@@ -52,6 +52,7 @@ module.exports = (app) => {
   
   // API Services Appointments
   app.post('/api/appointment/create', appointmentController.create);
+  app.post('/api/appointment/delete', appointmentController.delete);
   app.get('/api/appointment/find/doctor/:doctor', appointmentController.findByDoctor);
   app.get('/api/appointment/find/patient/:patient', appointmentController.findByPatient);
   app.get('/api/appointment/exists/doctor/:doctor/date/:date/time/:time', appointmentController.appointmentExists);

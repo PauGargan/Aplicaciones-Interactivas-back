@@ -44,6 +44,23 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
+    delete (req, res) {
+        return availability
+            .findOne({
+                where: {
+                    doctor_id: req.params.doctor,
+                    patient_id: req.params.patient
+                }
+            })
+            .then(availability => {
+                return availability
+                    .update({
+                        patient_id: null
+                    })
+            })
+            .catch(error => res.status(400).send(error))
+    },
+
     /**
      * Find an Appointment by Doctor
      */
