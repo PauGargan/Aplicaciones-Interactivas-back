@@ -22,6 +22,26 @@ module.exports = {
     },
 
     /**
+     * Patients Update
+     */
+    update (req, res) {
+        return patients
+            .findOne({
+                where: {
+                    id: req.body.patient_id
+                }
+            })
+            .then(patient => { 
+                delete req.body.patient_id;
+                return patient
+                    .update(req.body)
+                    .then(patient => res.status(200).send(patient))
+                    .catch(error => res.status(400).send(error))
+            })
+            .catch(error => res.status(400).send(error))
+    },
+
+    /**
      * List of Patients
      */
     list (_, res) {

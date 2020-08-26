@@ -40,7 +40,7 @@ module.exports = (app) => {
   //app.get('/api/feature/find/name/:name', featureController.find);
 
   // API Services Patients
-  app.post('/api/patient/create', patientController.create);
+  app.post('/api/patient/update', patientController.update);
   app.get('/api/patient/list', patientController.list);
   app.get('/api/patient/find/dni/:dni', patientController.find);
 

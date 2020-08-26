@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const Sequelize = require('sequelize');
 const db = require('../models');
 const users = db.users;
+const patients = db.patients;
+const PACIENTE = 3; // Role id del paciente
 
 const hashPasswordAsync = async password => {
 //	const salt = await bcrypt.genSalt()
@@ -27,7 +29,17 @@ module.exports = {
                 password: req.body.password,
                 status: req.body.status
             })
-            .then(users => res.status(200).send(users))
+            .then(users => {
+                if(users.role_id == PACIENTE) {
+                    return patients
+                        .create({
+                            user_id: users.id,
+                            dni: req.body.dni
+                        })
+                        .then(patient => res.status(200).send(patient))
+                        .catch(error => res.status(400).send(error));
+                }
+            })
             .catch(error => res.status(400).send(error))
 
     },
