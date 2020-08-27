@@ -4,6 +4,7 @@ const db = require('../models');
 const users = db.users;
 const patients = db.patients;
 const PACIENTE = 3; // Role id del paciente
+const service = require('../services/index.service');
 
 const hashPasswordAsync = async password => {
 //	const salt = await bcrypt.genSalt()
@@ -122,6 +123,31 @@ module.exports = {
                 }
             })
             .then(users => res.status(200).send(users))
+            .catch(error => res.status(400).send(error))
+    },
+
+    /**
+     * login
+     */
+    login (req, res) {
+        return users
+            .findOne({
+                where: {
+                    email: req.body.email,
+                    password: req.body.password
+                }
+            })
+            .then(user => {
+                let token = service.createToken(user);
+                let response = {
+                    token: token,
+                    user: {
+                        email: user.email,
+                    }
+                }
+
+                return res.status(200).send(response);
+            })
             .catch(error => res.status(400).send(error))
     },
 }
