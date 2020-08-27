@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const {Op} = require('sequelize');
 const db = require('../models');
 const availability = db.availability;
 
@@ -11,7 +11,7 @@ module.exports = {
         // Buscamos la disponibilidad deseada
         const disponibilidad = availability.findOne({
             where: {
-                doctor_id: req.body.doctor,
+                doctor_id: req.body.doctor_id,
                 date: req.body.date,
                 time: req.body.time
             }
@@ -24,16 +24,16 @@ module.exports = {
                 
                 if(turno === null) {
                     // Chequeamos si la disponibilidad existe (si el medico trabaja en ese horario).
-                    return res.status(201).send("No existe esta disponibilidad");
+                    return res.status(201).send({message: "No existe esta disponibilidad"});
 
                 } else if(turno.patient_id !== null) {
                     // Chequeamos si el turno ya esta ocupado.
-                    return res.status(201).send("Turno OCUPADO");
+                    return res.status(201).send({message: "Turno OCUPADO"});
 
                 } else {
                     // Grabamos el turno con el id del paciente.
                     turno.update({
-                        patient_id: req.body.patient
+                        patient_id: req.body.patient_id
                     
                     })
                     .then(turno => res.status(200).send(turno))
@@ -48,8 +48,9 @@ module.exports = {
         return availability
             .findOne({
                 where: {
-                    doctor_id: req.params.doctor,
-                    patient_id: req.params.patient
+                    doctor_id: req.body.doctor_id,
+                    patient_id: req.body.patient_id,
+                    date: req.body.date
                 }
             })
             .then(availability => {
@@ -57,6 +58,8 @@ module.exports = {
                     .update({
                         patient_id: null
                     })
+                    .then(turnoCancelado => res.status(200).send(turnoCancelado))
+                    .catch(error => res.status(400).send(error));
             })
             .catch(error => res.status(400).send(error))
     },
@@ -69,6 +72,9 @@ module.exports = {
             .findAll({
                 where: {
                     doctor_id: req.params.doctor,
+                    patient_id: {
+                        [Op.ne]: null
+                    }
                 }
             })
             .then(availability => res.status(200).send(availability))

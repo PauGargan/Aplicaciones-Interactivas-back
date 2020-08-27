@@ -11,7 +11,7 @@ module.exports = {
         // Capturo datos del request
         let dateFrom = req.body.dateFrom;
         let dateTo = req.body.dateTo;
-        let scheduleTemp = req.body.schedule;
+        let scheduleTemp = JSON.parse(req.body.schedule);
         let doc = req.body.doctor;
         let freq = req.body.frequency;
         
@@ -49,15 +49,16 @@ module.exports = {
                     end.setHours(schedule[weekday].endHour)
                     end.setMinutes(schedule[weekday].endMin);
 
-                    while(start < end) {
+                    for(let d = new Date(start); d.getTime() <= end.getTime(); d.setTime(d.getTime() + freq*60000)) {
+                        console.log(d.getMinutes());
+                        console.log(end);
                         obj = {
                             doctor_id: doc,
                             date: dt.getFullYear() + "-" + ((dt.getMonth()+1) > 9? (dt.getMonth()+1) : "0" + (dt.getMonth()+1)) 
                                 + "-" + (dt.getDate() > 9? dt.getDate() : "0" + dt.getDate()),
                             weekday: weekday,
-                            time: start.getHours() + ":" + (start.getMinutes() === 0 ? "0" + start.getMinutes() : start.getMinutes()),
+                            time: d.getHours() + ":" + (d.getMinutes() === 0 ? "0" + d.getMinutes() : d.getMinutes()),
                         };
-                        start.setMinutes(start.getMinutes() + freq);
                         arr.push(obj);
                     }
                 }

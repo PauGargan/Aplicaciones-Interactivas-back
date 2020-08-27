@@ -14,10 +14,11 @@ module.exports = {
                 name: req.body.name
             })
             .then(role => {
+                var permissionsReq = JSON.parse(req.body.permissions);
                 let permissionsArr = [];
-                for(let i=0; i < req.body.permissions.length; i++) {
-                    req.body.permissions[i].role_id = role.id;
-                    permissionsArr.push(req.body.permissions[i]);
+                for(let i=0; i < permissionsReq.length; i++) {
+                    permissionsReq[i].role_id = role.id;
+                    permissionsArr.push(permissionsReq[i]);
                 }
 
                 return permissions
@@ -39,7 +40,7 @@ module.exports = {
                 }
             })
             .then(role => { 
-                role
+                return role
                     .update({
                         name: req.body.name
                     })

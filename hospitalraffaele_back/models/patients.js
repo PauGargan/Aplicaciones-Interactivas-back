@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.STRING
     },
-    nivel_educacion: {
+    nivel_educativo: {
       allowNull: true,
       type: DataTypes.STRING
     },
