@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const {Op} = require('sequelize');
 const db = require('../models');
 const availability = db.availability;
 
@@ -79,7 +79,11 @@ module.exports = {
      */
     list (_, res) {
         return availability
-            .findAll({})
+            .findAll({where: {
+                patient_id: {
+                    [Op.eq]: null
+                }
+            }})
             .then(availability => res.status(200).send(availability))
             .catch(error => res.status(400).send(error))
     },
