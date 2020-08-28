@@ -7,6 +7,7 @@ const availabilityController = require('../controllers/availability');
 const appointmentController = require('../controllers/appointments');
 const uploadController = require('../controllers/uploads');
 const downloadController = require('../controllers/downloads');
+const histClinicaController = require('../controllers/histClinica');
 
 module.exports = (app) => {
 
@@ -21,6 +22,7 @@ module.exports = (app) => {
   app.get('/api/user/list', userController.list);
   app.get('/api/user/find/email/:email', userController.find);
   app.get('/api/user/list/role/:role', userController.listByRole);
+  app.post('/api/user/login', userController.login);
 
   // API Services Roles
   app.post('/api/role/create', roleController.create);
@@ -53,14 +55,23 @@ module.exports = (app) => {
   // API Services Appointments
   app.post('/api/appointment/create', appointmentController.create);
   app.post('/api/appointment/delete', appointmentController.delete);
+  app.get('/api/appointment/list', appointmentController.list);
   app.get('/api/appointment/find/doctor/:doctor', appointmentController.findByDoctor);
   app.get('/api/appointment/find/patient/:patient', appointmentController.findByPatient);
   app.get('/api/appointment/exists/doctor/:doctor/date/:date/time/:time', appointmentController.appointmentExists);
 
   // Upload and download
   app.post('/api/upload', uploadController.uploadFiles);
-  app.get('/api/upload/patient/:patient', uploadController.findByPatient);
+  app.get('/api/upload/find/patient/:patient', uploadController.findByPatient);
   app.get('/api/download/fileName/:fileName', downloadController.download); 
 
+  // Historia clinica
+  app.post('/api/historia-clinica/create-antecedentes', histClinicaController.createAntecedentes);
+  app.post('/api/historia-clinica/create-antecedentes-familiares', histClinicaController.createAntecedentesFamiliares);
+  app.post('/api/historia-clinica/create-info', histClinicaController.createInfo);
+  app.post('/api/historia-clinica/create-enfermedades', histClinicaController.createEnfermedades);
+  app.post('/api/historia-clinica/create-patologias', histClinicaController.createPatologias);
+  app.post('/api/historia-clinica/create-consultas', histClinicaController.createConsultas);
+  app.post('/api/historia-clinica/find/patient/:patient', histClinicaController.getHistClinica);
 }
 

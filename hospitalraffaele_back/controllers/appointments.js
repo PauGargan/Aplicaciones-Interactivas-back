@@ -109,5 +109,18 @@ module.exports = {
             })
             .then(availability => res.status(200).send(availability))
             .catch(error => res.status(400).send(error))
+    },
+
+    list (_, res) {
+        return availability
+            .findAll({
+                where: {
+                    patient_id: {
+                        [Op.ne]: null
+                    }
+                }
+            })
+            .then(availability => res.status(200).send(availability))
+            .catch(error => res.status(400).send(error))
     }
 }
