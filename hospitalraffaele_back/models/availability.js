@@ -14,10 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         as: 'doctors',
         foreignKey: 'doctor_id'
       });
-      availability.belongsTo(models.users, {
+      availability.belongsTo(models.patients, {
         as: 'patients',
         foreignKey: 'patient_id'
-      })
+      });
     }
   };
   availability.init({

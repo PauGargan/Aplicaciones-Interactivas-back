@@ -1,6 +1,8 @@
-const {Op} = require('sequelize');
+const {Op, HasOne, HasMany} = require('sequelize');
 const db = require('../models');
 const availability = db.availability;
+const users = db.users;
+const patients = db.patients;
 
 module.exports = {
 
@@ -74,7 +76,18 @@ module.exports = {
                     doctor_id: req.params.doctor,
                     patient_id: {
                         [Op.ne]: null
-                    }
+                    },
+                    include: [{
+                        model: patients,
+                        as: 'patients'
+                    },
+                    {
+                        model: users,
+                        as: "doctors",
+                        attributes: [
+                            'nombre', 'apellido'
+                        ]
+                    }]
                 }
             })
             .then(availability => res.status(200).send(availability))
@@ -89,10 +102,22 @@ module.exports = {
             .findAll({
                 where: {
                     patient_id: req.params.patient,
-                }
+                },
+                include: [{
+                    model: patients,
+                    as: 'patients'
+                },
+                {
+                    model: users,
+                    as: "doctors",
+                    attributes: [
+                        'nombre', 'apellido'
+                    ]
+                }]
             })
             .then(availability => res.status(200).send(availability))
-            .catch(error => res.status(400).send(error))
+            .catch(error =>
+                {console.log( error )})//res.status(400).send(error))
     },
 
     /**
@@ -118,7 +143,18 @@ module.exports = {
                     patient_id: {
                         [Op.ne]: null
                     }
-                }
+                },
+                include: [{
+                    model: patients,
+                    as: "patients"
+                },
+                {
+                    model: users,
+                    as: "doctors",
+                    attributes: [
+                        'nombre', 'apellido'
+                    ]
+                }]
             })
             .then(availability => res.status(200).send(availability))
             .catch(error => res.status(400).send(error))
