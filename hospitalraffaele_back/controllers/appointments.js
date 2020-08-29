@@ -52,7 +52,8 @@ module.exports = {
                 where: {
                     doctor_id: req.body.doctor_id,
                     patient_id: req.body.patient_id,
-                    date: req.body.date
+                    date: req.body.date,
+                    time: req.body.time
                 }
             })
             .then(availability => {
