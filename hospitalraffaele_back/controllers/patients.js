@@ -61,7 +61,7 @@ module.exports = {
      */
     find (req, res) {
         return patients
-            .findAll({
+            .findOne({
                 where: {
                     dni: req.params.dni,
                 },

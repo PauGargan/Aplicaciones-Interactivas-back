@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'uploaders',
         foreignKey: 'uploader_id'
       });
-      uploads.belongsTo(models.users, {
+      uploads.belongsTo(models.patients, {
         as: 'patients',
         foreignKey: 'patient_id'
       });

@@ -38,18 +38,6 @@ async function checkCreateUploadsFolder (uploadsFolder) {
 	return true
 }
 
-async function saveFileName (uploader, patient, fileName) {
-
-	return upload
-		.create({
-			uploader_id: uploader,
-			patient_id: patient,
-			title: fileName
-		})
-		.then(upload => {return upload})
-		.catch(e => {return false});
-}
-
 // Returns true or false depending on whether the file is an accepted type
 function checkAcceptedExtensions (file) 
 {
@@ -92,7 +80,6 @@ exports.uploadFiles = async function (req, res, next) {
 			myUploadedFiles.push(fileName)
 			try {
 				await fs.renameAsync(file.path, join(uploadsFolder, fileName));
-				await saveFileName(fields.uploader, fields.patient, fileName);
 			} catch (e) {
 				console.log('Error uploading the file')
 				try { await fs.unlinkAsync(file.path) } catch (e) {}
@@ -109,7 +96,6 @@ exports.uploadFiles = async function (req, res, next) {
 				myUploadedFiles.push(fileName)
 				try {
 					await fs.renameAsync(file.path, join(uploadsFolder, fileName));
-					await saveFileName(fields.uploader, fields.patient, fileName);
 				} catch (e) {
 					console.log('Error uploading the file')
 					try { await fs.unlinkAsync(file.path) } catch (e) {}
@@ -120,6 +106,20 @@ exports.uploadFiles = async function (req, res, next) {
 		
 		res.json({ok: true, msg: 'Files uploaded succesfully!', files: myUploadedFiles})
 	})
+}
+
+exports.saveImgName = function(req, res) {
+	console.log(req.userId);
+	return upload
+		.create({
+			uploader_id: req.userId,
+			patient_id: req.body.patient_id,
+			title: req.body.fileName
+		})
+		.then(uploads => res.status(200).send(uploads))
+		.catch(error => {console.log(error)}
+			//res.status(400).send(error)
+			)
 }
 
 exports.findByPatient = function (req, res) {

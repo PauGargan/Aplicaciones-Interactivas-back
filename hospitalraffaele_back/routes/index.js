@@ -63,6 +63,7 @@ module.exports = (app) => {
 
   // Upload and download
   app.post('/api/upload', uploadController.uploadFiles);
+  app.post('/api/upload/save', Auth, uploadController.saveImgName);
   app.get('/api/upload/find/patient/:patient', uploadController.findByPatient);
   app.get('/api/download/fileName/:fileName', downloadController.download); 
 
