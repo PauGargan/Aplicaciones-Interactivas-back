@@ -5,6 +5,7 @@ const users = db.users;
 const patients = db.patients;
 const PACIENTE = 3; // Role id del paciente
 const service = require('../services/index.service');
+const email = require('./email');
 
 const hashPasswordAsync = async password => {
 //	const salt = await bcrypt.genSalt()
@@ -31,6 +32,9 @@ module.exports = {
                 status: req.body.status
             })
             .then(users => {
+                //Envio el mail
+                email.enviarMail(users.email);  
+
                 if(users.role_id == PACIENTE) {
                     return patients
                         .create({
@@ -40,11 +44,10 @@ module.exports = {
                         .then(patient => res.status(200).send(patient))
                         .catch(error => res.status(400).send(error));
                 } else {
-                    return res.status(200).send(users); 
+                    return res.status(200).send({ token: service.createToken(users) }); 
                 }
             })
-            .catch(error => res.status(400).send(error))
-
+            .catch( error => res.status(400).send({message: 'Error al crear el usuario: ${err}'}))
     },
 
     /**
