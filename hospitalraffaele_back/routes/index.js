@@ -64,6 +64,7 @@ module.exports = (app) => {
   // Upload and download
   app.post('/api/upload', uploadController.uploadFiles);
   app.post('/api/upload/save', Auth, uploadController.saveImgName);
+  app.get('/api/upload/list', uploadController.list);
   app.get('/api/upload/find/patient/:patient', uploadController.findByPatient);
   app.get('/api/download/fileName/:fileName', downloadController.download); 
 
@@ -74,6 +75,12 @@ module.exports = (app) => {
   app.post('/api/historia-clinica/create-enfermedades', histClinicaController.createEnfermedades);
   app.post('/api/historia-clinica/create-patologias', histClinicaController.createPatologias);
   app.post('/api/historia-clinica/create-consultas', histClinicaController.createConsultas);
-  app.post('/api/historia-clinica/find/patient/:patient', histClinicaController.getHistClinica);
+  app.post('/api/historia-clinica/update-antecedentes', histClinicaController.updateAntecedentes);
+  app.post('/api/historia-clinica/update-antecedentes-familiares', histClinicaController.updateAntecedentesFamiliares);
+  app.post('/api/historia-clinica/update-info', histClinicaController.updateInfo);
+  app.post('/api/historia-clinica/update-enfermedades', histClinicaController.updateEnfermedades);
+  app.post('/api/historia-clinica/update-patologias', histClinicaController.updatePatologias);
+  app.post('/api/historia-clinica/update-consultas', histClinicaController.updateConsulta);
+  app.get('/api/historia-clinica/find/patient/:patient', histClinicaController.getHistClinica);
 }
 

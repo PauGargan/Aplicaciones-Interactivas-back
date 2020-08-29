@@ -132,3 +132,10 @@ exports.findByPatient = function (req, res) {
 		.then(uploads => res.status(200).send(uploads))
 		.catch(error => res.status(400).send(error))
 }
+
+exports.list = function (_, res) {
+	return upload
+		.findAll({})
+		.then(uploads => res.status(200).send(uploads))
+		.catch(error => res.status(400).send(error))
+}
