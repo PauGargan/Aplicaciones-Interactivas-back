@@ -5,7 +5,7 @@ const users = db.users;
 const patients = db.patients;
 const PACIENTE = 3; // Role id del paciente
 const service = require('../services/index.service');
-const nodemailer = require('nodemailer');
+const email = require('./email');
 
 const hashPasswordAsync = async password => {
 //	const salt = await bcrypt.genSalt()
@@ -14,50 +14,6 @@ const hashPasswordAsync = async password => {
 	 * you can store the password on the DB
 	 */
 	return hash;
-}
-
-
-function enviarMail(mail){
-    var transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,  
-        service: 'Gmail',
-        auth:{
-          user: 'mariagutierrezas1@gmail.com',
-          pass: 'paciente'
-        },
-              tls: {
-            rejectUnauthorized: false
-        }
-      });
-  
-      var mailOptions ={
-        from: "mariagutierrezas1@gmail.com",
-        to: mail,
-        subject: "Registro-",
-        text: "El registro se ha realizado correctamente.",
-        html: "<b>El registro se ha realizado correctamente.</b>"
-      };
-  
-      transporter.sendMail(mailOptions,(error,info)=>{
-        if(error)
-        {
-        //   res.status(500).send(error.message);
-        }
-  
-        else{
-          console.log("mail enviado");
-          console.log(res.json(info.response));
-          console.log("mensaje enviado",info.messageId );
-          console.log("mensaje url",nodemailer.getTestMessageUrl(info));
-  
-          res.send({
-            success:true,
-            message:'done'
-          });
-        }
-      });
 }
 
 module.exports = {
@@ -73,12 +29,13 @@ module.exports = {
                 role_id: req.body.role_id,
                 email: req.body.email,
                 password: req.body.password,
-                dni: req.body.dni,
                 status: req.body.status
             })
             .then(users => {
+                //Envio el mail
+                email.enviarMail(users.email);  
+
                 if(users.role_id == PACIENTE) {
-                    enviarMail(users.email);
                     return patients
                         .create({
                             user_id: users.id,
