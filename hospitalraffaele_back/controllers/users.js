@@ -138,15 +138,39 @@ module.exports = {
                 }
             })
             .then(user => {
-                let token = service.createToken(user);
-                let response = {
-                    token: token,
-                    user: {
-                        email: user.email,
+                if(user.role_id == PACIENTE){
+                    patients.findOne({
+                        where: {
+                            user_id: user.id
+                        }
+                    })
+                    .then(patient => {
+                        let token = service.createToken(user, patient.id);
+                        let response = {
+                            token: token,
+                            user: {
+                                user_id: user.id,
+                                patient_id: patient.id,
+                                email: user.email,
+                                role_id: user.role_id
+                            }
+                        }
+                        return res.status(200).send(response);
+                    })
+                    .catch(error => res.status(400).send(error));
+                } else {
+                    let token = service.createToken(user, null);
+                    let response = {
+                        token: token,
+                        user: {
+                            user_id: user.id,
+                            patient_id: null,
+                            email: user.email,
+                            role_id: user.role_id
+                        }
                     }
+                    return res.status(200).send(response);
                 }
-
-                return res.status(200).send(response);
             })
             .catch(error => res.status(400).send(error))
     },

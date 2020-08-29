@@ -8,6 +8,7 @@ const appointmentController = require('../controllers/appointments');
 const uploadController = require('../controllers/uploads');
 const downloadController = require('../controllers/downloads');
 const histClinicaController = require('../controllers/histClinica');
+const Auth = require('../auth/authorization');
 
 module.exports = (app) => {
 
@@ -18,7 +19,7 @@ module.exports = (app) => {
   // API Services Users
   app.post('/api/user/create', userController.create);
   app.post('/api/user/update', userController.update);
-  app.post('/api/user/disable', userController.disable);
+  app.post('/api/user/disable', Auth, userController.disable);
   app.get('/api/user/list', userController.list);
   app.get('/api/user/find/email/:email', userController.find);
   app.get('/api/user/list/role/:role', userController.listByRole);
