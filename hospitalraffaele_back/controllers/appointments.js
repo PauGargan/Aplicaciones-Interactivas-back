@@ -76,19 +76,19 @@ module.exports = {
                     doctor_id: req.params.doctor,
                     patient_id: {
                         [Op.ne]: null
-                    },
-                    include: [{
-                        model: patients,
-                        as: 'patients'
-                    },
-                    {
-                        model: users,
-                        as: "doctors",
-                        attributes: [
-                            'nombre', 'apellido'
-                        ]
-                    }]
-                }
+                    }
+                },
+                include: [{
+                    model: patients,
+                    as: "patients"
+                },
+                {
+                    model: users,
+                    as: "doctors",
+                    attributes: [
+                        'nombre', 'apellido'
+                    ]
+                }]
             })
             .then(availability => res.status(200).send(availability))
             .catch(error => res.status(400).send(error))
